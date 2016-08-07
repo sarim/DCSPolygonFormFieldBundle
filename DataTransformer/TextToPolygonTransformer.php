@@ -5,6 +5,7 @@ namespace DCS\Form\PolygonFormFieldBundle\DataTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use CrEOF\Spatial\PHP\Types\Geometry\Polygon;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use CrEOF\Spatial\PHP\Types\Geometry\LineString;
@@ -61,7 +62,12 @@ class TextToPolygonTransformer implements DataTransformerInterface
 
             $rings[] = new LineString($points);
         }
-
-        return new Polygon($rings);
+        
+        try {
+            $p = new Polygon($rings);
+        } catch (\Exception $e) {
+            throw new TransformationFailedException($e->getMessage());
+        }
+        return $p;
     }
 }

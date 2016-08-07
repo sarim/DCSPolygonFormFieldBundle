@@ -24,6 +24,11 @@ class PolygonType extends AbstractType
     {
         return $this->parentType;
     }
+    
+    public function getBlockPrefix()
+    {
+        return $this->getName();
+    }
 
     public function getName()
     {
